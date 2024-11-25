@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect to Database and Upload CSV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Connect to Database and Upload CSV</h1>
+            <form action="/connect-db" method="post">
+                <div class="field">
+                    <label class="label">Database Username</label>
+                    <div class="control">
+                        <input class="input" type="text" name="db_username" placeholder="Enter your database username" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Database Password</label>
+                    <div class="control">
+                        <input class="input" type="password" name="db_password" placeholder="Enter your database password" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Database Host</label>
+                    <div class="control">
+                        <input class="input" type="text" name="db_host" placeholder="Enter your database host" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Database Port</label>
+                    <div class="control">
+                        <input class="input" type="text" name="db_port" placeholder="Enter your database port (e.g. 3306)" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Database Name</label>
+                    <div class="control">
+                        <input class="input" type="text" name="db_name" placeholder="Enter your database name" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Table Name</label>
+                    <div class="control">
+                        <input class="input" type="text" name="db_table" placeholder="Enter the table to store CSV data" required>
+                    </div>
+                </div>
+
+
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-link" type="submit">Submit</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-link is-light" type="reset">Reset</button>
+                    </div>
+                </div>
+            </form>
+
+            <div id="response-message" class="notification is-hidden"></div>
+        </div>
+    </section>
+
+    <script>
+        const form = document.getElementById('db-upload-form');
+        const responseMessage = document.getElementById('response-message');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                responseMessage.classList.remove('is-hidden');
+                responseMessage.classList.add('is-success');
+                responseMessage.innerHTML = `Success: ${result.message}`;
+            } catch (error) {
+                responseMessage.classList.remove('is-hidden');
+                responseMessage.classList.add('is-danger');
+                responseMessage.innerHTML = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
